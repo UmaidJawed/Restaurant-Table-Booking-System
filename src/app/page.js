@@ -1,90 +1,160 @@
 "use client";
 
-import {useState} from 'react';
+import { useState, useEffect } from "react";
+import { FaSun, FaMoon } from "react-icons/fa";
 
-export default function Page(){
-    const [formData,setFormData] = useState({
-        date: "",
-        time:"",
-        guests: "",
-        name: "",
-        contact: ""
-    });
+export default function Page() {
+  const [formData, setFormData] = useState({
+    date: "",
+    time: "",
+    guests: "",
+    name: "",
+    contact: "",
+  });
 
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        alert("Remember You have to implement Backend At the End As Well..");
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
     }
+  }, []);
 
-    return(
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100 p-4">
-            <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
-                <h1 className="text-2xl font-bold text-gray-700 text-center mb-4">
-                    Restaurant Table Booking System
-                </h1>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-gray-600 font-medium mb-2">
-                            Date
-                        </label>
-                        <input type="date"
-                        className="w-full border border-gray-300 text-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                        value={formData.date} onChange={(e)=>setFormData({...formData,date:e.target.value})} required />
-                    </div>
-                    <div>
-                        <label className="block text-gray-600 font-medium mb-2">
-                            Time
-                        </label>
-                        <input type="time"
-                        className="w-full border border-gray-300 text-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                        onChange={(e)=>setFormData({...formData,time: e.target.value})} required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-600 font-medium mb-2">
-                            Number Of Guests
-                        </label>
-                        <input type="number"
-                        className="w-full border border-gray-300 text-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                        placeholder='Enter Number Of Guest'
-                        onChange={(e)=> setFormData(...formData,{guests: e.target.value})} required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-600 font-medium mb-2">
-                            Name
-                        </label>
-                        <input type="text"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-700"
-                        placeholder="Enter your name"
-                        onChange={(e)=>{
-                            setFormData(...formData,{name: e.target.value})
-                        }}required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-600 font-medium mb-2">
-                            Contact Number
-                        </label>
-                        <input type="tel"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-700"
-                        placeholder='Enter your contact number'
-                        value={formData.contact}
-                        onChange={(e)=>{
-                            setFormData(...formData,{contact: e.target.value})
-                        }}
-                        required
-                        />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition duration-300"
-                    >
-                        Book Table
-                    </button>
-                </form>
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem("theme", newMode ? "dark" : "light");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Remember You have to implement Backend At the End As Well..");
+  };
+
+  return (
+    <div
+      className={`min-h-screen flex flex-col items-center justify-center p-4 ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-blue-50 to-blue-100 text-gray-700"
+      }`}
+    >
+      <div className="absolute top-4 right-4">
+        <div
+          className="flex items-center justify-between w-16 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer relative"
+          onClick={toggleDarkMode}
+        >
+          <div
+            className={`w-6 h-6 bg-white dark:bg-yellow-300 rounded-full shadow-md absolute transform transition-all duration-300 ${
+              darkMode ? "translate-x-8" : "translate-x-0"
+            }`}
+          >
+            <div className="flex items-center justify-center w-full h-full">
+              {darkMode ? <FaMoon className="text-gray-900" /> : <FaSun className="text-yellow-500" />}
             </div>
+          </div>
         </div>
-    )
-
+      </div>
+      <div
+        className={`w-full max-w-lg shadow-lg rounded-lg p-6 ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h1 className={`text-2xl font-bold text-center mb-4 ${darkMode ? "text-white" : "text-gray-700"}`}>
+          Restaurant Table Booking System
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Date
+            </label>
+            <input
+              type="date"
+              className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
+                  : "border-gray-300 text-gray-700 focus:ring-blue-400"
+              }`}
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Time
+            </label>
+            <input
+              type="time"
+              className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
+                  : "border-gray-300 text-gray-700 focus:ring-blue-400"
+              }`}
+              onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Number Of Guests
+            </label>
+            <input
+              type="number"
+              className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
+                  : "border-gray-300 text-gray-700 focus:ring-blue-400"
+              }`}
+              placeholder="Enter Number Of Guest"
+              onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Name
+            </label>
+            <input
+              type="text"
+              className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
+                  : "border-gray-300 text-gray-700 focus:ring-blue-400"
+              }`}
+              placeholder="Enter your name"
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Contact Number
+            </label>
+            <input
+              type="tel"
+              className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
+                  : "border-gray-300 text-gray-700 focus:ring-blue-400"
+              }`}
+              placeholder="Enter your contact number"
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className={`w-full rounded-lg py-2 transition duration-300 ${
+              darkMode
+                ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
+                : "bg-blue-500 text-white hover:bg-blue-600"
+            }`}
+          >
+            Book Table
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
