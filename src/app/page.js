@@ -13,6 +13,7 @@ export default function Page() {
   });
 
   const [darkMode, setDarkMode] = useState(false);
+  const [validationError, setValidationError] = useState({});
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -27,9 +28,50 @@ export default function Page() {
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
+  const handleValidationErrors = () => {
+    const error = {};
+
+    if (!formData.date) {
+      error.date = "Date is required.";
+    }
+
+    if (!formData.time) {
+      error.time = "Time is required.";
+    }
+
+    if (!formData.guests || formData.guests <= 0) {
+      error.guests = "Number of guests must be at least 1.";
+    }
+
+    if (!formData.name.trim()) {
+      error.name = "Name is required.";
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!formData.contact || !phoneRegex.test(formData.contact)) {
+      error.contact = "Enter a valid 10-digit contact number.";
+    }
+
+    setValidationError(error);
+    return Object.keys(error).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Remember You have to implement Backend At the End As Well..");
+
+    if (handleValidationErrors()) {
+      alert("Form submitted successfully! Remember to implement the backend.");
+      setFormData({
+        date: "",
+        time: "",
+        guests: "",
+        name: "",
+        contact: "",
+      });
+      setValidationError({});
+    } else {
+      alert("Please correct the errors before submitting.");
+    }
   };
 
   return (
@@ -76,8 +118,8 @@ export default function Page() {
               }`}
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              required
             />
+            {validationError.date && <p className="text-red-500 text-sm">{validationError.date}</p>}
           </div>
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
@@ -90,9 +132,10 @@ export default function Page() {
                   ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
+              value={formData.time}
               onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-              required
             />
+            {validationError.time && <p className="text-red-500 text-sm">{validationError.time}</p>}
           </div>
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
@@ -105,10 +148,11 @@ export default function Page() {
                   ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
-              placeholder="Enter Number Of Guest"
+              placeholder="Enter Number Of Guests"
+              value={formData.guests}
               onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-              required
             />
+            {validationError.guests && <p className="text-red-500 text-sm">{validationError.guests}</p>}
           </div>
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
@@ -122,9 +166,10 @@ export default function Page() {
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
               placeholder="Enter your name"
+              value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
             />
+            {validationError.name && <p className="text-red-500 text-sm">{validationError.name}</p>}
           </div>
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
@@ -140,8 +185,8 @@ export default function Page() {
               placeholder="Enter your contact number"
               value={formData.contact}
               onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-              required
             />
+            {validationError.contact && <p className="text-red-500 text-sm">{validationError.contact}</p>}
           </div>
           <button
             type="submit"
