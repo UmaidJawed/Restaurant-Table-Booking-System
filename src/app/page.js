@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { ModalExample } from "@/modal-component/modal-component";
+
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ export default function Page() {
   const [darkMode, setDarkMode] = useState(false);
   const [validationError, setValidationError] = useState({});
 
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -27,6 +30,9 @@ export default function Page() {
     setDarkMode(newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
+
+  const openModal = ()=> setIsModalOpen(true);
+  const closeModal = ()=> setIsModalOpen(false);
 
   const handleValidationErrors = () => {
     const error = {};
@@ -58,9 +64,10 @@ export default function Page() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // alert("Your Form Submitted successfully")
 
     if (handleValidationErrors()) {
-      alert("Form submitted successfully! Remember to implement the backend.");
+    //   alert("Form submitted successfully! Remember to implement the backend.");
       setFormData({
         date: "",
         time: "",
@@ -188,6 +195,8 @@ export default function Page() {
             />
             {validationError.contact && <p className="text-red-500 text-sm">{validationError.contact}</p>}
           </div>
+
+            <ModalExample/>
           <button
             type="submit"
             className={`w-full rounded-lg py-2 transition duration-300 ${
