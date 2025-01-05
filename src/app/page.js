@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import TableSelectionModal from "@/modal-component/modal-component";
+import { FaSun, FaMoon, FaTimes } from "react-icons/fa";
+
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -109,15 +111,21 @@ export default function Page() {
       }`}
     >
       {/* Dark mode toggle */}
-      <div className="absolute top-4 right-4">
-        <button
+     <div className="absolute top-4 right-4">
+        <div
+          className="flex items-center justify-between w-16 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer relative"
           onClick={toggleDarkMode}
-          className={`p-2 rounded-lg ${
-            darkMode ? "bg-gray-800 text-yellow-400" : "bg-white text-gray-800"
-          }`}
         >
-          {darkMode ? "🌙" : "☀️"}
-        </button>
+          <div
+            className={`w-6 h-6 bg-white dark:bg-yellow-300 rounded-full shadow-md absolute transform transition-all duration-300 ${
+              darkMode ? "translate-x-8" : "translate-x-0"
+            }`}
+          >
+            <div className="flex items-center justify-center w-full h-full">
+              {darkMode ? <FaMoon className="text-gray-900" /> : <FaSun className="text-yellow-500" />}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div
