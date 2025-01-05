@@ -235,7 +235,7 @@ export default function Page() {
                 onClick={() => setIsModalOpen(true)}
                 className={`px-4 py-2 rounded-lg ${
                   darkMode
-                    ? "bg-gray-700 text-white hover:bg-gray-600"
+                    ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
                     : "bg-blue-500 text-white hover:bg-blue-600"
                 }`}
               >
