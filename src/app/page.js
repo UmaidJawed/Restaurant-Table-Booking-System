@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaSun, FaMoon } from "react-icons/fa";
 import TableSelectionModal from "@/modal-component/modal-component";
-
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -12,15 +10,12 @@ export default function Page() {
     guests: "",
     name: "",
     contact: "",
+    selectedTables: [],
   });
-  const [timeSlots] = useState([
-    "11:00", "11:30", "12:00", "12:30", "13:00",
-    "13:30", "14:00", "19:00", "19:30", "20:00"
-  ]);
+
   const [darkMode, setDarkMode] = useState(false);
   const [validationError, setValidationError] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTables, setSelectedTables] = useState([]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -35,8 +30,11 @@ export default function Page() {
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
-  const handleConfirm = (selectedTables) => {
-    console.log('Selected tables:', selectedTables);
+  const handleConfirm = (tables) => {
+    setFormData(prev => ({
+      ...prev,
+      selectedTables: tables
+    }));
     setIsModalOpen(false);
   };
 
@@ -64,26 +62,43 @@ export default function Page() {
       error.contact = "Enter a valid 10-digit contact number.";
     }
 
+    // Table selection validation
+    if (formData.selectedTables.length === 0) {
+      error.tables = "Please select a table.";
+    }
+
+    if (formData.selectedTables.length > 1) {
+      error.tables = "You can only select one table at a time.";
+    }
+
     setValidationError(error);
     return Object.keys(error).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // alert("Your Form Submitted successfully")
 
     if (handleValidationErrors()) {
-    //   alert("Form submitted successfully! Remember to implement the backend.");
+      // Log the complete booking data
+      console.log("Booking Details:", {
+        date: formData.date,
+        time: formData.time,
+        guests: formData.guests,
+        name: formData.name,
+        contact: formData.contact,
+        tableId: formData.selectedTables[0] // Since we only allow one table
+      });
+
+      // Reset form
       setFormData({
         date: "",
         time: "",
         guests: "",
         name: "",
         contact: "",
+        selectedTables: [],
       });
       setValidationError({});
-    } else {
-      alert("Please correct the errors before submitting.");
     }
   };
 
@@ -93,22 +108,18 @@ export default function Page() {
         darkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-blue-50 to-blue-100 text-gray-700"
       }`}
     >
+      {/* Dark mode toggle */}
       <div className="absolute top-4 right-4">
-        <div
-          className="flex items-center justify-between w-16 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer relative"
+        <button
           onClick={toggleDarkMode}
+          className={`p-2 rounded-lg ${
+            darkMode ? "bg-gray-800 text-yellow-400" : "bg-white text-gray-800"
+          }`}
         >
-          <div
-            className={`w-6 h-6 bg-white dark:bg-yellow-300 rounded-full shadow-md absolute transform transition-all duration-300 ${
-              darkMode ? "translate-x-8" : "translate-x-0"
-            }`}
-          >
-            <div className="flex items-center justify-center w-full h-full">
-              {darkMode ? <FaMoon className="text-gray-900" /> : <FaSun className="text-yellow-500" />}
-            </div>
-          </div>
-        </div>
+          {darkMode ? "🌙" : "☀️"}
+        </button>
       </div>
+
       <div
         className={`w-full max-w-lg shadow-lg rounded-lg p-6 ${
           darkMode ? "bg-gray-800" : "bg-white"
@@ -132,13 +143,14 @@ export default function Page() {
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
             />
-            {validationError.date && <p className="text-red-500 text-sm">{validationError.date}</p>}
+            {validationError.date && <p className="text-red-500 text-sm mt-1">{validationError.date}</p>}
           </div>
+
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-              Available Time Slot
+              Time
             </label>
-            {/* <input
+            <input
               type="time"
               className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
                 darkMode
@@ -148,28 +160,12 @@ export default function Page() {
               value={formData.time}
               onChange={(e) => setFormData({ ...formData, time: e.target.value })}
             />
-            {validationError.time && <p className="text-red-500 text-sm">{validationError.time}</p>} */}
-           <select
-            value={formData.time}
-            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-            className={`w-full p-2 border rounded focus:outline-none focus:ring-2 transition-colors duration-300 ${
-                darkMode
-                ? "bg-gray-800 text-white border-gray-600 focus:ring-gray-500"
-                : "bg-white text-gray-800 border-gray-300 focus:ring-blue-500"
-            }`}
-            >
-                <option value="">Select time</option>
-                {timeSlots.map((slot) => (
-                    <option key={slot} value={slot}>
-                    {slot}
-                    </option>
-                ))}
-            </select>
-
+            {validationError.time && <p className="text-red-500 text-sm mt-1">{validationError.time}</p>}
           </div>
+
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-              Number Of Guests
+              Number of Guests
             </label>
             <input
               type="number"
@@ -178,12 +174,13 @@ export default function Page() {
                   ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
-              placeholder="Enter Number Of Guests"
               value={formData.guests}
               onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+              placeholder="Enter number of guests"
             />
-            {validationError.guests && <p className="text-red-500 text-sm">{validationError.guests}</p>}
+            {validationError.guests && <p className="text-red-500 text-sm mt-1">{validationError.guests}</p>}
           </div>
+
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Name
@@ -195,12 +192,13 @@ export default function Page() {
                   ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
-              placeholder="Enter your name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Enter your name"
             />
-            {validationError.name && <p className="text-red-500 text-sm">{validationError.name}</p>}
+            {validationError.name && <p className="text-red-500 text-sm mt-1">{validationError.name}</p>}
           </div>
+
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Contact Number
@@ -212,34 +210,47 @@ export default function Page() {
                   ? "bg-gray-700 border-gray-600 text-white focus:ring-yellow-400"
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
-              placeholder="Enter your contact number"
               value={formData.contact}
               onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              placeholder="Enter 10-digit number"
             />
-            {validationError.contact && <p className="text-red-500 text-sm">{validationError.contact}</p>}
+            {validationError.contact && <p className="text-red-500 text-sm mt-1">{validationError.contact}</p>}
           </div>
-            {/* <ModalComponent /> */}
-            <div>
-            <button   className={`text-lg font-normal px-4 py-2 rounded-lg shadow-md transition-colors duration-300 ${
-                darkMode
-                ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
-                : "bg-blue-500 text-gray-100 hover:bg-blue-600"
-                     }`} onClick={() => setIsModalOpen(true)}>
-                Select Tables
-            </button>
 
-            <TableSelectionModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={handleConfirm}
-                darkMode={darkMode} // Pass your dark mode state
-            />
+          <div>
+            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Table Selection
+            </label>
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className={`px-4 py-2 rounded-lg ${
+                  darkMode
+                    ? "bg-gray-700 text-white hover:bg-gray-600"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+              >
+                {formData.selectedTables.length > 0
+                  ? `Selected Table: ${formData.selectedTables[0]}`
+                  : "Select a Table"}
+              </button>
+              {formData.selectedTables.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, selectedTables: [] })}
+                  className="text-red-500 hover:text-red-600 ml-2"
+                >
+                  Clear Selection
+                </button>
+              )}
             </div>
-
+            {validationError.tables && <p className="text-red-500 text-sm mt-1">{validationError.tables}</p>}
+          </div>
 
           <button
             type="submit"
-            className={`w-full text-xl rounded-lg py-3 transition duration-300 ${
+            className={`w-full rounded-lg py-2 mt-6 transition duration-300 ${
               darkMode
                 ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
                 : "bg-blue-500 text-white hover:bg-blue-600"
@@ -249,6 +260,14 @@ export default function Page() {
           </button>
         </form>
       </div>
+
+      <TableSelectionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirm}
+        darkMode={darkMode}
+        selectedTables={formData.selectedTables}
+      />
     </div>
   );
 }
