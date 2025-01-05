@@ -136,9 +136,9 @@ export default function Page() {
           </div>
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-              Time
+              Available Time Slot
             </label>
-            <input
+            {/* <input
               type="time"
               className={`w-full border rounded-lg px-3 py-2 focus:ring-2 ${
                 darkMode
@@ -148,7 +148,24 @@ export default function Page() {
               value={formData.time}
               onChange={(e) => setFormData({ ...formData, time: e.target.value })}
             />
-            {validationError.time && <p className="text-red-500 text-sm">{validationError.time}</p>}
+            {validationError.time && <p className="text-red-500 text-sm">{validationError.time}</p>} */}
+           <select
+            value={formData.time}
+            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+            className={`w-full p-2 border rounded focus:outline-none focus:ring-2 transition-colors duration-300 ${
+                darkMode
+                ? "bg-gray-800 text-white border-gray-600 focus:ring-gray-500"
+                : "bg-white text-gray-800 border-gray-300 focus:ring-blue-500"
+            }`}
+            >
+                <option value="">Select time</option>
+                {timeSlots.map((slot) => (
+                    <option key={slot} value={slot}>
+                    {slot}
+                    </option>
+                ))}
+            </select>
+
           </div>
           <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
