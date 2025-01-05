@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
-import { ModalExample } from "@/modal-component/modal-component";
+import TableSelectionModal from "@/modal-component/modal-component";
 
 
 export default function Page() {
@@ -13,10 +13,14 @@ export default function Page() {
     name: "",
     contact: "",
   });
-
+  const [timeSlots] = useState([
+    "11:00", "11:30", "12:00", "12:30", "13:00",
+    "13:30", "14:00", "19:00", "19:30", "20:00"
+  ]);
   const [darkMode, setDarkMode] = useState(false);
   const [validationError, setValidationError] = useState({});
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTables, setSelectedTables] = useState([]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -31,8 +35,10 @@ export default function Page() {
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
-  const openModal = ()=> setIsModalOpen(true);
-  const closeModal = ()=> setIsModalOpen(false);
+  const handleConfirm = (selectedTables) => {
+    console.log('Selected tables:', selectedTables);
+    setIsModalOpen(false);
+  };
 
   const handleValidationErrors = () => {
     const error = {};
@@ -195,8 +201,25 @@ export default function Page() {
             />
             {validationError.contact && <p className="text-red-500 text-sm">{validationError.contact}</p>}
           </div>
+            {/* <ModalComponent /> */}
+            <div>
+            <button   className={`text-lg font-normal px-4 py-2 rounded-lg shadow-md transition-colors duration-300 ${
+                darkMode
+                ? "bg-gray-800 text-white hover:bg-gray-700"
+                : "bg-blue-500 text-gray-100 hover:bg-blue-600"
+                     }`} onClick={() => setIsModalOpen(true)}>
+                Select Tables
+            </button>
 
-            <ModalExample/>
+            <TableSelectionModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleConfirm}
+                darkMode={darkMode} // Pass your dark mode state
+            />
+            </div>
+
+
           <button
             type="submit"
             className={`w-full rounded-lg py-2 transition duration-300 ${
