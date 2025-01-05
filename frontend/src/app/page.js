@@ -119,14 +119,16 @@ export default function Page() {
     }
   };
 
-return (
+  return (
     <div
       className={`min-h-screen flex flex-col items-center justify-center p-4 ${
-        darkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-blue-50 to-blue-100 text-gray-700"
+        darkMode
+          ? "bg-gray-900 text-white"
+          : "bg-gradient-to-r from-blue-50 to-blue-100 text-gray-700"
       }`}
     >
       {/* Dark mode toggle */}
-     <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4">
         <div
           className="flex items-center justify-between w-16 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer relative"
           onClick={toggleDarkMode}
@@ -148,12 +150,20 @@ return (
           darkMode ? "bg-gray-800" : "bg-white"
         }`}
       >
-        <h1 className={`text-2xl font-bold text-center mb-4 ${darkMode ? "text-white" : "text-gray-700"}`}>
+        <h1
+          className={`text-2xl font-bold text-center mb-4 ${
+            darkMode ? "text-white" : "text-gray-700"
+          }`}
+        >
           Restaurant Table Booking System
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <label
+              className={`block font-medium mb-2 ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               Date
             </label>
             <input
@@ -164,13 +174,23 @@ return (
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
               value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, date: e.target.value })
+              }
             />
-            {validationError.date && <p className="text-red-500 text-sm mt-1">{validationError.date}</p>}
+            {validationError.date && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationError.date}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <label
+              className={`block font-medium mb-2 ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               Time
             </label>
             <input
@@ -181,13 +201,23 @@ return (
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
               value={formData.time}
-              onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, time: e.target.value })
+              }
             />
-            {validationError.time && <p className="text-red-500 text-sm mt-1">{validationError.time}</p>}
+            {validationError.time && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationError.time}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <label
+              className={`block font-medium mb-2 ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               Number of Guests
             </label>
             <input
@@ -198,14 +228,24 @@ return (
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
               value={formData.guests}
-              onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, guests: e.target.value })
+              }
               placeholder="Enter number of guests"
             />
-            {validationError.guests && <p className="text-red-500 text-sm mt-1">{validationError.guests}</p>}
+            {validationError.guests && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationError.guests}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <label
+              className={`block font-medium mb-2 ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               Name
             </label>
             <input
@@ -216,14 +256,24 @@ return (
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               placeholder="Enter your name"
             />
-            {validationError.name && <p className="text-red-500 text-sm mt-1">{validationError.name}</p>}
+            {validationError.name && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationError.name}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <label
+              className={`block font-medium mb-2 ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               Contact Number
             </label>
             <input
@@ -234,13 +284,18 @@ return (
                   : "border-gray-300 text-gray-700 focus:ring-blue-400"
               }`}
               value={formData.contact}
-              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, contact: e.target.value })
+              }
               placeholder="Enter 10-digit number"
             />
-            {validationError.contact && <p className="text-red-500 text-sm mt-1">{validationError.contact}</p>}
+            {validationError.contact && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationError.contact}
+              </p>
+            )}
           </div>
-
-          <div>
+         <div>
             <label className={`block font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Table Selection
             </label>
@@ -250,7 +305,7 @@ return (
                 onClick={() => setIsModalOpen(true)}
                 className={`px-4 py-2 rounded-lg ${
                   darkMode
-                    ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
+                    ? "bg-gray-700 text-white hover:bg-gray-600"
                     : "bg-blue-500 text-white hover:bg-blue-600"
                 }`}
               >
@@ -271,6 +326,7 @@ return (
             {validationError.tables && <p className="text-red-500 text-sm mt-1">{validationError.tables}</p>}
           </div>
 
+
           <button
             type="submit"
             className={`w-full rounded-lg py-2 mt-6 transition duration-300 ${
@@ -283,16 +339,13 @@ return (
           </button>
         </form>
       </div>
-
-      <TableSelectionModal
+        <TableSelectionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleConfirm}
         darkMode={darkMode}
         selectedTables={formData.selectedTables}
       />
-
     </div>
-
   );
 }
