@@ -64,7 +64,7 @@ export default function Page() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // alert("Your Form Submitted successfully")
+    alert("Your Form Submitted successfully")
 
     if (handleValidationErrors()) {
     //   alert("Form submitted successfully! Remember to implement the backend.");
