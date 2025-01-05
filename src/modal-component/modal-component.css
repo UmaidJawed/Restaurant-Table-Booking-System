@@ -41,9 +41,11 @@
   gap: 16px; /* Space between tables */
 }
 
+
 .cancelbutton{
     margin-top: 5%;
 }
 .confirmbooking{
     margin-top: 5%;
+    margin-left: 1%;
 }
