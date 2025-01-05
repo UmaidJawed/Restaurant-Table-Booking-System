@@ -1,9 +1,9 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import TableSelectionModal from "@/modal-component/modal-component";
+import useBooking from "@/hooks/useBooking";
+import useSeat from "@/hooks/useSeat";
 import { FaSun, FaMoon, FaTimes } from "react-icons/fa";
-
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,16 @@ export default function Page() {
   const [darkMode, setDarkMode] = useState(false);
   const [validationError, setValidationError] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const {
+    bookings,
+    loading,
+    error,
+    fetchBookings,
+    fetchBookingById,
+    createBooking,
+    deleteBooking,
+  } = useBooking();
+  const { seats, initializeSeats,} = useSeat();
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -33,9 +42,9 @@ export default function Page() {
   };
 
   const handleConfirm = (tables) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      selectedTables: tables
+      selectedTables: tables,
     }));
     setIsModalOpen(false);
   };
@@ -77,20 +86,26 @@ export default function Page() {
     return Object.keys(error).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (handleValidationErrors()) {
-      // Log the complete booking data
       console.log("Booking Details:", {
         date: formData.date,
         time: formData.time,
         guests: formData.guests,
         name: formData.name,
         contact: formData.contact,
-        tableId: formData.selectedTables[0] // Since we only allow one table
+        tableId: formData.selectedTables[0],
       });
-
+      await createBooking({
+        date: formData.date,
+        time: formData.time,
+        guests: formData.guests,
+        name: formData.name,
+        contact: formData.contact,
+        seatNumber: formData.selectedTables[0],
+      });
       // Reset form
       setFormData({
         date: "",
@@ -104,7 +119,7 @@ export default function Page() {
     }
   };
 
-  return (
+return (
     <div
       className={`min-h-screen flex flex-col items-center justify-center p-4 ${
         darkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-blue-50 to-blue-100 text-gray-700"
@@ -276,6 +291,8 @@ export default function Page() {
         darkMode={darkMode}
         selectedTables={formData.selectedTables}
       />
+
     </div>
+
   );
 }
