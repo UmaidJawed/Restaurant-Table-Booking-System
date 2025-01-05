@@ -205,7 +205,7 @@ export default function Page() {
             <div>
             <button   className={`text-lg font-normal px-4 py-2 rounded-lg shadow-md transition-colors duration-300 ${
                 darkMode
-                ? "bg-gray-800 text-white hover:bg-gray-700"
+                ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
                 : "bg-blue-500 text-gray-100 hover:bg-blue-600"
                      }`} onClick={() => setIsModalOpen(true)}>
                 Select Tables
@@ -222,7 +222,7 @@ export default function Page() {
 
           <button
             type="submit"
-            className={`w-full rounded-lg py-2 transition duration-300 ${
+            className={`w-full text-xl rounded-lg py-3 transition duration-300 ${
               darkMode
                 ? "bg-yellow-500 text-gray-900 hover:bg-yellow-600"
                 : "bg-blue-500 text-white hover:bg-blue-600"
